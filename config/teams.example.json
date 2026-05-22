@@ -1,0 +1,23 @@
+{
+  "defaultTeam": {
+    "id": "default",
+    "name": "공용 데스크",
+    "color": "#5C7A9A",
+    "zone": "shared"
+  },
+  "teams": {
+    "newsletter": { "id": "newsletter", "name": "뉴스레터팀", "color": "#E07B5C", "zone": "zone-1" },
+    "research":   { "id": "research",   "name": "리서치팀",   "color": "#6BA88A", "zone": "zone-2" },
+    "data":       { "id": "data",       "name": "데이터팀",   "color": "#8C7BB5", "zone": "zone-3" },
+    "design":     { "id": "design",     "name": "디자인팀",   "color": "#D9A85C", "zone": "zone-4" },
+    "ops":        { "id": "ops",        "name": "운영팀",     "color": "#5C9BB5", "zone": "zone-5" }
+  },
+  "projectToTeam": {
+    "newsletter":            "newsletter",
+    "miraeasset_disclosure": "research",
+    "classify-by-bojong":    "ops",
+    "youtube-notion-agent":  "data",
+    "recipe-app":            "design",
+    "ai":                    "newsletter"
+  }
+}
