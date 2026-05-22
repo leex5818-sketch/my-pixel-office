@@ -8,6 +8,7 @@ import {
   CAMERA_FOLLOW_SNAP_THRESHOLD,
   ZOOM_MIN,
   ZOOM_MAX,
+  ZOOM_STEP,
   ZOOM_SCROLL_THRESHOLD,
   PAN_MARGIN_FRACTION,
   CHARACTER_SITTING_OFFSET_PX,
@@ -292,9 +293,9 @@ export function OfficeCanvas({ officeState, onClick, zoom, onZoomChange, panRef,
     if (e.ctrlKey || e.metaKey) {
       zoomAccumulatorRef.current += e.deltaY
       if (Math.abs(zoomAccumulatorRef.current) >= ZOOM_SCROLL_THRESHOLD) {
-        const delta = zoomAccumulatorRef.current < 0 ? 1 : -1
+        const delta = zoomAccumulatorRef.current < 0 ? ZOOM_STEP : -ZOOM_STEP
         zoomAccumulatorRef.current = 0
-        const newZoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom + delta))
+        const newZoom = Math.round(Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom + delta)) * 10) / 10
         if (newZoom !== zoom) onZoomChange(newZoom)
       }
     } else {
