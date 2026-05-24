@@ -23,3 +23,6 @@ pixel-agents-current.png
 .env
 .env.local
 *.plist
+
+# Auto-start runtime log (Windows Task Scheduler launcher)
+autostart.log

@@ -34,7 +34,8 @@ import { resolveTeam, getAllTeams } from "./teams.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = parseInt(process.env.PORT || "3457", 10);
-const IDLE_SHUTDOWN_MS = 600_000; // 10 minutes
+// 0 (or negative) disables the idle shutdown — set IDLE_SHUTDOWN_MS=0 for always-on auto-start scenarios.
+const IDLE_SHUTDOWN_MS = parseInt(process.env.IDLE_SHUTDOWN_MS ?? "600000", 10);
 
 // State
 const agents = new Map<string, TrackedAgent>(); // sessionId -> agent
@@ -459,15 +460,19 @@ server.listen(PORT, () => {
   console.log(`Watching ~/.claude/projects/ for active sessions...`);
 });
 
-// Idle shutdown
-setInterval(() => {
-  if (agents.size === 0 && clients.size === 0 && Date.now() - lastActivityTime > IDLE_SHUTDOWN_MS) {
-    console.log("No active sessions or clients for 10 minutes, shutting down...");
-    watcher.stop();
-    server.close();
-    process.exit(0);
-  }
-}, 30_000);
+// Idle shutdown (disabled when IDLE_SHUTDOWN_MS <= 0)
+if (IDLE_SHUTDOWN_MS > 0) {
+  setInterval(() => {
+    if (agents.size === 0 && clients.size === 0 && Date.now() - lastActivityTime > IDLE_SHUTDOWN_MS) {
+      console.log(`No active sessions or clients for ${Math.round(IDLE_SHUTDOWN_MS / 60_000)} minutes, shutting down...`);
+      watcher.stop();
+      server.close();
+      process.exit(0);
+    }
+  }, 30_000);
+} else {
+  console.log("Idle shutdown disabled (IDLE_SHUTDOWN_MS=0)");
+}
 
 // Graceful shutdown
 process.on("SIGINT", () => {
